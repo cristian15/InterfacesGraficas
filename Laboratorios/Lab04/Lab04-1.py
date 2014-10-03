@@ -1,7 +1,3 @@
-# Profesor: Luis Caro Saldivia
-# Nombre: Cristian Beltran Concha
-# Carrera: Ing. civil Informatica UCT
-#====================================
 import pygame.image
 import PIL
 import win32com.client
