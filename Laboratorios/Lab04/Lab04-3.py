@@ -23,19 +23,27 @@ def movRobots():
 	return
 def bounce():
 	for i in range(nR):
+		for j in range(nR):
+			if i != j:
+				if robot[i].x < robot[j].x +5:
+					robot[i].theta = 1.5*math.pi - robot[i].theta
+				if robot[i].z < robot[j].z +5:
+					robot[i].theta = -robot[i].theta 
+		
 		if robot[i].x >= width-robot[i].radius:
 			robot[i].x -=  (robot[i].x +robot[i].radius)-width
-			robot[i].theta = - robot[i].theta
-			print robot[i].theta
-		elif robot[i].x < robot[i].radius:
+			robot[i].theta = 1.5*math.pi - robot[i].theta
+		if robot[i].x < robot[i].radius:
 			robot[i].x +=  robot[i].radius-robot[i].x
-			robot[i].theta = -robot[i].theta
+			robot[i].theta = 1.5*math.pi+robot[i].theta
+			print robot[i].x
 		if robot[i].z > height-robot[i].radius:
-			robot[i].z -=  (robot[i].z +robot[i].radius) -height
-			robot[i].theta = math.pi + robot[i].theta
+			robot[i].z -=  (robot[i].z +robot[i].radius) - height 
+			robot[i].theta = -robot[i].theta
 		elif robot[i].z < robot[i].radius:
 			robot[i].z +=  robot[i].radius-robot[i].z
-			robot[i].theta = math.pi - robot[i].theta
+			robot[i].theta = -robot[i].theta
+			
 	return
 robot = []
 for i in range(nR):
@@ -44,8 +52,8 @@ for i in range(nR):
 	print z
 	robot.append(cylinder(pos=(x,3,z),axis =(0,6,0),radius=10 , color = color.red))
 	robot[i].velocity = RA.random()	# asigna velocidad
-	#robot[i].theta = RA.uniform(0,math.pi*2)	# angulo de movimiento
-	robot[i].theta = math.pi*.5
+	robot[i].theta = RA.uniform(0,math.pi*2)	# angulo de movimiento
+	#robot[i].theta = 0#math.pi*.5
 	
 while 1:
 	rate(100)
