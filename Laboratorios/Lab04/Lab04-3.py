@@ -26,8 +26,9 @@ def bounce():
 	for i in range(nR):
 		for j in range(nR):
 			if i != j:				
-				if mag(robot[i].pos - robot[j].pos) <= 25:
+				if mag(robot[i].pos - robot[j].pos) <= 25:	# distancia entre dos 
 					robot[i].theta = np.random.uniform(0, math.pi*2)
+					robot[i].velocity = RA.random()
 					
 		if robot[i].x >= width-robot[i].radius:
 			robot[i].x -=  (robot[i].x +robot[i].radius)-width
