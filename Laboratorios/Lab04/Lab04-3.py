@@ -1,6 +1,7 @@
 import random as RA
 import math
 from visual import *
+import numpy as np
 
 
 # ventana VPython
@@ -24,32 +25,28 @@ def movRobots():
 def bounce():
 	for i in range(nR):
 		for j in range(nR):
-			if i != j:
-				if robot[i].x < robot[j].x +5:
-					robot[i].theta = 1.5*math.pi - robot[i].theta
-				if robot[i].z < robot[j].z +5:
-					robot[i].theta = -robot[i].theta 
-		
+			if i != j:				
+				if mag(robot[i].pos - robot[j].pos) <= 25:
+					robot[i].theta = np.random.uniform(0, math.pi*2)
+					
 		if robot[i].x >= width-robot[i].radius:
 			robot[i].x -=  (robot[i].x +robot[i].radius)-width
 			robot[i].theta = 1.5*math.pi - robot[i].theta
 		if robot[i].x < robot[i].radius:
 			robot[i].x +=  robot[i].radius-robot[i].x
 			robot[i].theta = 1.5*math.pi+robot[i].theta
-			print robot[i].x
 		if robot[i].z > height-robot[i].radius:
 			robot[i].z -=  (robot[i].z +robot[i].radius) - height 
 			robot[i].theta = -robot[i].theta
 		elif robot[i].z < robot[i].radius:
 			robot[i].z +=  robot[i].radius-robot[i].z
 			robot[i].theta = -robot[i].theta
-			
+		print mag(robot[0].pos - robot[1].pos)
 	return
 robot = []
 for i in range(nR):
 	x = RA.randint(10,width-10)
 	z = RA.randint(10,height-10)
-	print z
 	robot.append(cylinder(pos=(x,3,z),axis =(0,6,0),radius=10 , color = color.red))
 	robot[i].velocity = RA.random()	# asigna velocidad
 	robot[i].theta = RA.uniform(0,math.pi*2)	# angulo de movimiento
