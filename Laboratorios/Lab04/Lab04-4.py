@@ -40,26 +40,62 @@ LAngleZX = label(pos = (0, 80, height), text = "Angulo ZX " + str(Robot.angleZX)
 LFuel = label(pos = (0, 100, height), text = "Combustible " + str(Robot.fuel), opacity = .5)
 #--------------------------------
 
-Fg = vector(0.0, g, 0.0) * Robot.masa
+Fg = vector(0.0, g, 0.0) * Robot.masa		# calcula Peso
 dt = .01
-pointer = arrow(pos=(0,0,0), axis= Robot.axis*100, shaftwidth =5, color= color.orange)
+pointer = arrow(pos=(0,0,0), axis= Robot.axis*100, shaftwidth =5, color= color.orange)	# dibuja Vector direccion
 
-#Robot.rotate(angle = math.radians(-90), axis=(0,1,0), origin=Robot.pos)
+
 
 while True:
 	rate(100)
-	print math.atan(Robot.axis.x/Robot.axis.z)
-	#    Coordenadas esfericas
+	# ------------- Calcula angulos de direccion ------------------
+	if Robot.axis.z != 0:
+		# ---------   Primer cuadrante ---------------------
+		Robot.angleZX = round(abs(math.degrees( math.atan(Robot.axis.x/Robot.axis.z))), 3) 
+		# --------------------------------------------------
+		if Robot.axis.x > 0:
+			# ----------  segundo cuadrante  X > 0 y Z < 0 ----------------
+			if Robot.axis.z < 0:
+				Robot.angleZX = 180 - Robot.angleZX 
+			# ---------------------------------------------------------
+			
+		elif Robot.axis.x < 0:
+			# ------------------ Terces cuadrante ---------------------
+			if Robot.axis.z < 0:
+				Robot.angleZX += 180
+			# ---------------------------------------------------------
+			# ------------------ Cuarto Cuadrante ---------------------
+			elif Robot.axis.z > 0:
+					Robot.angleZX = 360 - Robot.angleZX
+			# ---------------------------------------------------------
+	else: # si z es Zero
+		if Robot.axis.x > 0:
+			Robot.angleZX = 90
+		elif Robot.axis.x < 0:
+			Robot.angleZX = 270
+			
+			
+	if Robot.axis.x != 0:
+		Robot.angleYX = 90-round(abs(math.degrees( math.atan(Robot.axis.y/Robot.axis.x))), 3)		
+		if Robot.axis.y < 0:
+			Robot.angleYX = 180 - Robot.angleYX		
+	else: # si x es Zero
+		if Robot.axis.z > 0:
+			Robot.angleZX = 0
+		elif Robot.axis.z < 0:
+			Robot.angleZX = 180
+	# -----------------------------------------------------------------
+	# -------------- Coordenadas esfericas ----------------------------
 	x = Robot.Force * math.sin( math.radians( Robot.angleYX ) ) * math.sin( math.radians( Robot.angleZX ) )
 	y = Robot.Force * math.cos( math.radians( Robot.angleYX ) )
 	z = Robot.Force * math.sin( math.radians( Robot.angleYX ) ) * math.cos( math.radians( Robot.angleZX ) )
-	#==============================
+	# -----------------------------------------------------------------
 	
 	Fthru = vector( x, y, z )		# Empuje
 	Fnet = Fthru + Fg
 	Robot.vel += ( Fnet/Robot.masa ) * dt
 	Robot.pos += Robot.vel * dt		# actualiza pos
-	Robot.fuel -= abs(Robot.vel.x + Robot.vel.y + Robot.vel.z ) * dt	# disminuye combustible
+	Robot.fuel -= abs(Robot.vel.x + Robot.vel.y + Robot.vel.z )*.1 * dt	# disminuye combustible
 	
 	#------ Etiquetas ---------------
 	Lvelocidad.text = "Velocidad " + str(round(Robot.vel.x,3)) + ", "+ str(round(Robot.vel.y,3)) + ", " + str(round(Robot.vel.z,3)) +">"
@@ -70,8 +106,9 @@ while True:
 	#--------------------------------
 	
 	print Robot.axis
-	pointer.axis= vector(Robot.axis.x, Robot.axis.y, Robot.axis.z)*100
-	
+	# ------------------ Vector de direccion Empuje --------------------
+	pointer.axis= vector(Robot.axis.x, Robot.axis.y, Robot.axis.z)*100  
+	# ------------------------------------------------------------------
 	
 	if Robot.x <= base.x + base.width  and Robot.z <= base.z +base.height:	# si esta sobre la base
 		if Robot.y <= 6.0:  # acota piso
@@ -99,25 +136,26 @@ while True:
 	if scene.kb.keys:
 		k = scene.kb.getkey()
 		if k == 'u':
-			Robot.Force += 2.0
+			Robot.Force += .5
 			print Robot.Force
 		if k == 'r':
 			Robot.Force = 0.0
+			Robot.axis = vector(0,1,0)
 		if k == 'right':
-			Robot.angleYX += 1	
+			#Robot.angleYX += 1	
 			Robot.rotate(angle = math.radians(-1), axis=(0,1,0), origin=Robot.pos) 	# gira el dron
 			print Robot.angleYX
 		if k == 'left':
-			Robot.angleYX += 1
+			#Robot.angleYX += 1
 			Robot.rotate(angle = math.radians(1), axis=(0,1,0), origin=Robot.pos)
 		if k == 'down':
-			Robot.angleZX -= 1
+			#Robot.angleZX -= 1
 			Robot.rotate(angle = math.radians(1), axis=(0,0,1), origin=Robot.pos)
 			print Robot.angleZX
 		if k == 'up':
-			Robot.angleZX -= 1
+			#Robot.angleZX -= 1
 			Robot.rotate(angle = math.radians(-1), axis=(0,0,1), origin=Robot.pos)
-			print Robot.angleZX
+			
 			
 			
 			
