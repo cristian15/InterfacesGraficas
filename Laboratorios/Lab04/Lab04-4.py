@@ -11,13 +11,13 @@ scene.background = (255,255,255)
 height = 200
 width = 500
 g = -9.8
-fuelInitial = 1000
+fuelInitial = 1000.0
 
 Robot = frame()
-cylinder(frame=Robot,pos=(0,0,0),axis=(8,0,0),radius=10,color=(0,0,255))
-cylinder(frame=Robot,pos=(3,0,0),axis=(2,0,0),radius=11,color=(255,255,0))
-cone(frame=Robot,pos=(-3,0,0),axis=(4,0,0),radius=4,color=(150,150,150))
-Robot.axis=(0,1,0)  # robot apunta hacia arriba
+cylinder( frame=Robot,pos=(0,0,0),axis=(8,0,0),radius=10,color=(0,0,255) )
+cylinder( frame=Robot,pos=(3,0,0),axis=(2,0,0),radius=11,color=(255,255,0) )
+cone( frame=Robot,pos=(-3,0,0),axis=(4,0,0),radius=4,color=(150,150,150) )
+Robot.axis=( 0, 1, 0 )  # robot apunta hacia arriba
 	
 Robot.pos = vector(20.0,6.0,20.0)
 Robot.vel = vector(0.0,0.0,0.0)
@@ -25,15 +25,13 @@ Robot.vel = vector(0.0,0.0,0.0)
 Robot.angleZX = 0.0		
 Robot.angleYX = 0.0
 # ----------------------------------
-Robot.masa = 10
+Robot.masa = 1.0
 Robot.Force = 0.0
 Robot.fuel = fuelInitial		# combustible
 
-
+Fthru = 0.0
 base = box(pos=(20, 0, 20), size=(40,6,40), color=color.red)
 ground = box(pos=(width/2, -3, height/2), size=(width, 3, height), color = color.green)	# piso en VPython
-
-Fthru = 0.0
 
 #------ Etiquetas ---------------
 Lvelocidad = label(pos = (0, 20, height), text = "Velocidad " + str(Robot.vel), opacity = .5)
@@ -43,11 +41,10 @@ LAngleZX = label(pos = (0, 80, height), text = "Angulo ZX " + str(Robot.angleZX)
 LFuel = label(pos = (0, 100, height), text = "Combustible " + str(Robot.fuel), opacity = .1)
 #--------------------------------
 
+
 Fg = vector(0.0, g, 0.0) * Robot.masa		# calcula Peso
 dt = .01
 pointer = arrow(pos=(0,0,0), axis= Robot.axis*100, shaftwidth =5, color= color.orange)	# dibuja Vector direccion
-
-
 
 while True:
 	rate(100)
@@ -75,8 +72,7 @@ while True:
 		if Robot.axis.x > 0:
 			Robot.angleZX = 90
 		elif Robot.axis.x < 0:
-			Robot.angleZX = 270
-			
+			Robot.angleZX = 270			
 			
 	if Robot.axis.x != 0:
 		Robot.angleYX = 90-round(abs(math.degrees( math.atan(Robot.axis.y/Robot.axis.x))), 3)		
@@ -88,6 +84,7 @@ while True:
 		elif Robot.axis.z < 0:
 			Robot.angleZX = 180
 	# -----------------------------------------------------------------
+	
 	# -------------- Coordenadas esfericas ----------------------------
 	x = Robot.Force * math.sin( math.radians( Robot.angleYX ) ) * math.sin( math.radians( Robot.angleZX ) )
 	y = Robot.Force * math.cos( math.radians( Robot.angleYX ) )
@@ -123,7 +120,7 @@ while True:
 			Fthru = vector(0.0, 0.0, 0.0)
 	else:		# si no esta sobre la base
 		if Robot.y <= 0.0:  # acota piso
-			Robot.y = 0.
+			Robot.y = 0.0
 			Robot.vel = vector(0.0, 0.0, 0.0)
 			Fthru = vector(0.0, 0.0, 0.0)
 	if Robot.x >= width:	# no avanza fuera de la pista
@@ -132,6 +129,7 @@ while True:
 		Robot.x = 0.0
 	if Robot.z >= height:
 		Robot.z = height
+		Robot.vel.y -= Robot.vel.y
 	elif Robot.z <= 0:
 		Robot.z =0		
 	if Robot. y > 200.0:
