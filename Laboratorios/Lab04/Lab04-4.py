@@ -11,6 +11,7 @@ scene.background = (255,255,255)
 height = 200
 width = 500
 g = -9.8
+fuelInitial = 1000
 
 Robot = frame()
 cylinder(frame=Robot,pos=(0,0,0),axis=(8,0,0),radius=10,color=(0,0,255))
@@ -20,11 +21,13 @@ Robot.axis=(0,1,0)  # robot apunta hacia arriba
 	
 Robot.pos = vector(20.0,6.0,20.0)
 Robot.vel = vector(0.0,0.0,0.0)
-Robot.angleZX = 0.0
+# ------- Angulos coordenadas esfericas
+Robot.angleZX = 0.0		
 Robot.angleYX = 0.0
-Robot.masa = 1.0
+# ----------------------------------
+Robot.masa = 10
 Robot.Force = 0.0
-Robot.fuel = 1000		# combustible
+Robot.fuel = fuelInitial		# combustible
 
 
 base = box(pos=(20, 0, 20), size=(40,6,40), color=color.red)
@@ -37,7 +40,7 @@ Lvelocidad = label(pos = (0, 20, height), text = "Velocidad " + str(Robot.vel), 
 LEmpuje = label(pos = (0, 40, height), text = "Empuje " + str(Fthru), opacity = .5)
 LAngleYX = label(pos = (0, 60, height), text = "Angulo YX " + str(Robot.angleYX), opacity = .5)
 LAngleZX = label(pos = (0, 80, height), text = "Angulo ZX " + str(Robot.angleZX), opacity = .5)
-LFuel = label(pos = (0, 100, height), text = "Combustible " + str(Robot.fuel), opacity = .5)
+LFuel = label(pos = (0, 100, height), text = "Combustible " + str(Robot.fuel), opacity = .1)
 #--------------------------------
 
 Fg = vector(0.0, g, 0.0) * Robot.masa		# calcula Peso
@@ -91,25 +94,28 @@ while True:
 	z = Robot.Force * math.sin( math.radians( Robot.angleYX ) ) * math.cos( math.radians( Robot.angleZX ) )
 	# -----------------------------------------------------------------
 	
+	# ------------ Actualiza variables de vuelo ---------------------
 	Fthru = vector( x, y, z )		# Empuje
 	Fnet = Fthru + Fg
 	Robot.vel += ( Fnet/Robot.masa ) * dt
 	Robot.pos += Robot.vel * dt		# actualiza pos
 	Robot.fuel -= abs(Robot.vel.x + Robot.vel.y + Robot.vel.z )*.1 * dt	# disminuye combustible
+	# -----------------------------------------------------------------
 	
 	#------ Etiquetas ---------------
 	Lvelocidad.text = "Velocidad " + str(round(Robot.vel.x,3)) + ", "+ str(round(Robot.vel.y,3)) + ", " + str(round(Robot.vel.z,3)) +">"
 	LEmpuje.text = "Empuje < " + str(round(Fthru.x,3)) + ", "+ str(round(Fthru.y,3)) + ", " + str(round(Fthru.z,3)) +">"
 	LAngleYX.text = "Angulo YX " + str(Robot.angleYX)
 	LAngleZX.text = "Angulo ZX " + str(Robot.angleZX)
-	LFuel.text = "Combustible " + str(Robot.fuel)
+	LFuel.text = "Combustible " + str(round(Robot.fuel, 3)) + " Lts. ("+str(round(Robot.fuel*100/fuelInitial,2))+" %)"
 	#--------------------------------
 	
-	print Robot.axis
+	print Robot.vel
 	# ------------------ Vector de direccion Empuje --------------------
 	pointer.axis= vector(Robot.axis.x, Robot.axis.y, Robot.axis.z)*100  
 	# ------------------------------------------------------------------
-	
+		
+	# ---------- Limites --------------------
 	if Robot.x <= base.x + base.width  and Robot.z <= base.z +base.height:	# si esta sobre la base
 		if Robot.y <= 6.0:  # acota piso
 			Robot.y = 6.0
@@ -120,8 +126,6 @@ while True:
 			Robot.y = 0.
 			Robot.vel = vector(0.0, 0.0, 0.0)
 			Fthru = vector(0.0, 0.0, 0.0)
-		
-	# ---------- Limites --------------------
 	if Robot.x >= width:	# no avanza fuera de la pista
 		Robot.x = width	
 	elif Robot.x <=0.0:
@@ -133,14 +137,36 @@ while True:
 	if Robot. y > 200.0:
 		Robot.y = 200.0
 	# ---------------------------------------
+	
+	if Robot.fuel <= 0.0:  # se acaba el combustible
+		Robot.fuel = 0.0
+		Robot.Force = 0.0
+	
+	if Robot.fuel <= fuelInitial*.25:
+		Robot.axis = vector(-0.8, 1, -0.8)
+		if Robot.x <= base.x :
+			Robot.axis.x = 0
+		if Robot.z <= base.z:
+			Robot.axis.z = 0 
+		if Robot.x <= base.x and Robot.z <= base.z:
+			Robot.axis = (0,1,0)
+			Robot.Force = 9.4
+			
+	
+	# --------------------- escucha las teclas -----------------
 	if scene.kb.keys:
 		k = scene.kb.getkey()
-		if k == 'u':
-			Robot.Force += .5
-			print Robot.Force
-		if k == 'r':
+		if k == 'u':		# aumenta Fuerza
+			Robot.Force += .2
+		if k == 'd':		# disminuye Fuerza
+			Robot.Force -= .2
+		if k == 'r':		# reset Fuerza y direccion
 			Robot.Force = 0.0
 			Robot.axis = vector(0,1,0)
+			
+		if k == 'v':
+			Robot.axis = vector(-0.4, 1, -0.4)
+			#Robot.pos = (base.x, Robot.y, base.z)
 		if k == 'right':
 			#Robot.angleYX += 1	
 			Robot.rotate(angle = math.radians(-1), axis=(0,1,0), origin=Robot.pos) 	# gira el dron
