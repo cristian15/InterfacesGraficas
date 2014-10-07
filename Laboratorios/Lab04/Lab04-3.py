@@ -3,7 +3,6 @@ import math
 from visual import *
 import numpy as np
 
-
 # ventana VPython
 scene.width = 800
 scene.height = 600
@@ -27,9 +26,8 @@ def bounce():
 		for j in range(nR):
 			if i != j:				
 				if mag(robot[i].pos - robot[j].pos) <= 25:	# distancia entre dos 
-					robot[i].theta = np.random.uniform(0, math.pi*2)
-					robot[i].velocity = RA.random()
-					
+					robot[i].theta += np.random.uniform(0, math.pi*2)
+					robot[i].velocity = RA.random()					
 		if robot[i].x >= width-robot[i].radius:
 			robot[i].x -=  (robot[i].x +robot[i].radius)-width
 			robot[i].theta = 1.5*math.pi - robot[i].theta
