@@ -21,8 +21,7 @@ def createRobot():
 	cone( frame=Robot,pos=(-3,0,0),axis=(4,0,0),radius=4,color=(150,150,150) )
 	Robot.axis=( 0, 1, 0 )  # robot apunta hacia arriba
 	xIni = RA.randint(20, width-20)
-	zIni = RA.randint(20, height-20)
-	
+	zIni = RA.randint(20, height-20)	
 	
 	Robot.pos = vector(xIni,6.0,zIni)
 	Robot.vel = vector(0.0,0.0,0.0)
@@ -43,13 +42,9 @@ def createRobot():
 	#Robot.Lvelocidad = label(pos = (Robot.x,Robot.y,Robot.z), text = "Velocidad " + str(Robot.vel), opacity = .5)
 	#Robot.LEmpuje = label(pos = (Robot.x,Robot.y+20,Robot.z), text = "Empuje " + str(Robot.Thru), opacity = .5)
 	Robot.LFuel = label(pos = (Robot.x,Robot.y+40,Robot.z), text = "Combustible " + str(Robot.fuel), opacity = .1)
-	#--------------------------------
-	
-	
+	#--------------------------------	
 	return Robot
 	
-
-
 def setAngles():
 	for i in range(len(dron)):
 		if dron[i].axis.z != 0:
@@ -130,10 +125,9 @@ def movDron(Robot):
 # -------------- Crea los drones ---------
 dron = []
 for i in range(nDrons):
-	dron.append(createRobot())
+	dron.append(createRobot())		# agrega los drones al arreglo
 # ---------------------------------------
 setAngles()
-
 dt = .01
 ground = box(pos=(width/2, -3, height/2), size=(width, 3, height), color = color.green)	# piso en VPython
 

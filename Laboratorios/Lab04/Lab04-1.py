@@ -16,7 +16,9 @@ screen.fill(background)
 
 word = win32com.client.DispatchEx("Word.Application")	# inicia word
 word.DisplayAlerts = 0
-doc = word.Documents.Add() # crea el doc
+doc = word.Documents.Add() # Crea el doc
+
+
 
 run = True
 while run:
@@ -32,7 +34,7 @@ while run:
 		if cKey[pygame.K_s]:
 			#word.ActiveDocument.SaveAs('C:\\prueba.docx')
 			word.Visible=True	# muestra el documento
-	image = cam.getImage()
+	image = cam.getImage()		# captura la imagen
 	#print image
 	#image.thumbnail((400,300), PIL.Image.ANTIALIAS)		# resize image camara
 	img = pygame.image.fromstring(image.tostring(), image.size, 'RGB')		# convierte a surface la PIL image

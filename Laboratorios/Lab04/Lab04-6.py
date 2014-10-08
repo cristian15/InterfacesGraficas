@@ -11,7 +11,7 @@ scene.background = (255,255,255)
 
 width = 600
 height = 200
-angle=10
+angle = 10
 g = -9.8
 dt = 0.01
 
@@ -20,8 +20,8 @@ ground = box(pos=(0, -3, 0), size=(width, 6, height), color = color.green)	# pis
 tabla = box(pos = (0, 40, 0), size = (300, 10, height/2), color = color.red)
 tabla.rotate(angle=-math.radians(angle), axis = (0,0,1))
 
-p1 = box(pos=(0, 25, 60), size = (40, 50, 20))
-p2 = box(pos=(0, 25, -60), size = (40, 50, 20))
+p1 = box(pos = (0, 25, 60), size = (40, 50, 20))
+p2 = box(pos = (0, 25, -60), size = (40, 50, 20))
 
 bloque = box(pos=(0, 55,0), size=(40,20,20), color=color.blue)
 bloque.rotate(angle=-math.radians(angle), axis = (0,0,1))
