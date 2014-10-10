@@ -128,7 +128,7 @@ for i in range(nDrons):
 	dron.append(createRobot())		# agrega los drones al arreglo
 # ---------------------------------------
 setAngles()
-dt = .01
+dt = 0.01
 ground = box(pos=(width/2, -3, height/2), size=(width, 3, height), color = color.green)	# piso en VPython
 
 while 1:
