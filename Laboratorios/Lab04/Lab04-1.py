@@ -33,7 +33,7 @@ while run:
 			os.remove('C:\\img.png')
 		if cKey[pygame.K_s]:
 			#word.ActiveDocument.SaveAs('C:\\prueba.docx')
-			word.Visible=True	# muestra el documento
+			word.Visible = True	# muestra el documento
 	image = cam.getImage()		# captura la imagen
 	#print image
 	#image.thumbnail((400,300), PIL.Image.ANTIALIAS)		# resize image camara
