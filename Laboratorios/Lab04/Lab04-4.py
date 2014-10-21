@@ -1,3 +1,12 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: En VPython implementa el movimiento de un dron en los ejes XYZ mediante coordenadas cilindricas
+# ---------- , por cada unidad de distancia recorrida disminuye el combustible, ademas el usuario puede aumentar el epuje  
+# ------------------------------------------------
+
 from visual import *
 
 # ventana VPython
@@ -164,20 +173,15 @@ while True:
 			
 		if k == 'v':
 			Robot.axis = vector(-0.4, 1, -0.4)
-			#Robot.pos = (base.x, Robot.y, base.z)
 		if k == 'right':
-			#Robot.angleYX += 1	
 			Robot.rotate(angle = math.radians(-1), axis=(0,1,0), origin=Robot.pos) 	# gira el dron
 			print Robot.angleYX
 		if k == 'left':
-			#Robot.angleYX += 1
 			Robot.rotate(angle = math.radians(1), axis=(0,1,0), origin=Robot.pos)
 		if k == 'down':
-			#Robot.angleZX -= 1
 			Robot.rotate(angle = math.radians(1), axis=(0,0,1), origin=Robot.pos)
 			print Robot.angleZX
 		if k == 'up':
-			#Robot.angleZX -= 1
 			Robot.rotate(angle = math.radians(-1), axis=(0,0,1), origin=Robot.pos)
 			
 			

@@ -1,3 +1,12 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: En VPython simula el rebote de una pelota, tomando en cuenta la ley de conservacion de energia
+# ----- para calcular la altura de los revotes, toma en cuenta el viento para un movimiento en 3D y el coeficiente de restitucion de la pelota
+# ------------------------------------------------
+
 from visual import *
 
 # ventana VPython
@@ -28,7 +37,7 @@ wind = vector(30, -1, 5)
 
 
 
-s = 0	
+s = 0	# para soltar la pelota
 while 1:
 	rate(100)	
 	if s == 1:
@@ -56,7 +65,7 @@ while 1:
 			
 	if scene.kb.keys:
 		k = scene.kb.getkey()
-		if k == 's':		# soltar bloque
+		if k == 's':		# soltar la pelota
 			s = 1
 		if k == 'r':
 			s = 0

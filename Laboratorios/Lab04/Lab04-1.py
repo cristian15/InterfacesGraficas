@@ -1,3 +1,10 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: Scanner con webcam, captura una imagen con una webcam y la guarda en un archivo Word
+# -------------------------------------------------
 import pygame.image
 import PIL
 import win32com.client
@@ -17,7 +24,10 @@ screen.fill(background)
 word = win32com.client.DispatchEx("Word.Application")	# inicia word
 word.DisplayAlerts = 0
 doc = word.Documents.Add() # Crea el doc
-
+fuente = pygame.font.Font(None, 40)
+	# -------------- etiquetas ------------------
+etiqueta = fuente.render('Capturar[a]        Guardar[s] ',1, (0,0,0))	
+screen.blit(etiqueta, (20, height-55))
 
 
 run = True
@@ -29,16 +39,12 @@ while run:
 			run = False
 		if cKey[pygame.K_a]:
 			cam.saveSnapshot('c:\\img.png')	# captura imagen 
-			newShape = word.ActiveDocument.InlineShapes.AddPicture("C:\\img.png", False, True)	# agrega la foto al documento
-			os.remove('C:\\img.png')
+			newShape = word.ActiveDocument.InlineShapes.AddPicture("c:\\img.png", False, True)	# agrega la foto al documento
+			os.remove('c:\\img.png')
 		if cKey[pygame.K_s]:
-			#word.ActiveDocument.SaveAs('C:\\prueba.docx')
 			word.Visible = True	# muestra el documento
 	image = cam.getImage()		# captura la imagen
-	#print image
-	#image.thumbnail((400,300), PIL.Image.ANTIALIAS)		# resize image camara
 	img = pygame.image.fromstring(image.tostring(), image.size, 'RGB')		# convierte a surface la PIL image
 	screen.blit(img, (width/2 - 320,0))
-	#cam.saveSnapshot('c:\das.jpg')	# captura imagen
 	pygame.display.flip()
 

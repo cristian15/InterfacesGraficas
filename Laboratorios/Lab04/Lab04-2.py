@@ -1,3 +1,12 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: Grafica una regresion lineal con PyLab e inserta este grafico en un archivo Word,
+# ------------------ Ademas agrega datos a Excel e inserta grafico de los datos cargados
+# -------------------------------------------------
+
 from numpy import arange, array, ones, random, linalg
 from pylab import *
 import win32com.client as win32

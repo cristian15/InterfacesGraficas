@@ -57,8 +57,8 @@ wiiuse.rumble(wiimots[0],0)
 sleep(1)
 
 
-s = serial.Serial(9)		# COM8 virtual
-s.baudrate = 9600
+s = serial.Serial(8)		# COM8 virtual
+s.baudrate = 4800
 
 s.timeout = 0		# no espera a leer
 alp = 0.0

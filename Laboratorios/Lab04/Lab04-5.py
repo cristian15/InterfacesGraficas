@@ -1,3 +1,12 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: En VPython implementa el movimiento de 5 drones ubicados en forma aleatoria con sus bases de despegue
+ # ------------- el usuario puede modificar la direccion de vuelo en forma randomica
+# ------------------------------------------------
+
 from visual import *
 import random as RA
 
@@ -45,6 +54,7 @@ def createRobot():
 	#--------------------------------	
 	return Robot
 	
+# set los angulos para las coordenadas cilindricas, 
 def setAngles():
 	for i in range(len(dron)):
 		if dron[i].axis.z != 0:

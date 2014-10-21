@@ -20,13 +20,14 @@ if not found:
     print 'not found'
 connected = wiiuse.connect(wiimotes, 1)
 if connected:
-	s = serial.Serial(8)		# COM7 virtual
+	s = serial.Serial(7)		# COM7 virtual
 	s.baudrate = 9600
 	s.timeout = 0		# no espera a leer
+	print " sa"
 	while 1:
 		r = wiiuse.poll(wiimotes, 1)	
 		if r != 0:
-			s.write(str(round(handle_event(wiimotes[0]),3)))
+			s.write(str(handle_event(wiimotes[0])))
 			time.sleep(.005)
 			print handle_event(wiimotes[0])	
 
