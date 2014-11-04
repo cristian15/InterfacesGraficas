@@ -1,3 +1,10 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: baja imagenes desde FTP y las convierte con efecto Polaroid
+# -------------------------------------------------
 import os
 from ftplib import FTP
 import time

@@ -1,3 +1,10 @@
+# -----------------------------------------------
+# ----- Nombre: Cristian Beltran Concha ---------
+# ----- Prof: Luis Caro Saldivia ----------------
+# ----- Asignatura: Interfaces Graficas de Usuario ----------
+# -----------------------------------------------
+# ----- Descripcion: Captura imagen de la camara cada 30 secs y envia a FTP con efecto carboncillo
+# -------------------------------------------------
 import pygame.image
 import PIL
 from VideoCapture import Device
@@ -15,11 +22,9 @@ cam = Device()		# inicia la camara
 screen.fill(background)
 
 def enviaFTP(ruta, destino):
-	#ftp = FTP('vigilatucasa.cl')
-	#ftp.login('vigilatu','[F4z7#y~IQF{')		# conecta
 	ftp = FTP('localhost')
 	ftp.login('toor','123456')		# conecta
-	print ftp.getwelcome()
+	print ftp.getwelcome()			# muestra mesaje bienvenida
 	file = open(ruta,'rb')
 	ftp.storbinary('STOR '+ destino, file)		# sube el archivo
 	time.sleep(.5)
@@ -31,6 +36,7 @@ fuente = pygame.font.Font(None, 40)
 	# -------------- etiquetas ------------------
 etiqueta = fuente.render('Tiempo: 0.0',1, (0,0,0))	
 screen.blit(etiqueta, (20, height-55))
+
 cam.saveSnapshot('img.png')	# captura imagen 
 os.system("convert -charcoal 3 img.png  imgCar.png")		# efecto carboncillo
 enviaFTP('imgCar.png','/capturas/fc_0.png')
