@@ -23,4 +23,7 @@ def enviaFTP(ruta, destino):
 for files in os.listdir("Imagen/"):
     if files.endswith(".jpg"):
 		os.system('convert Imagen/'+files+' -bordercolor white -background black +polaroid Imagen/fotoSu.png')	# efecto polaroid
+		os.system('convert Imagen/foto.png' ' -crop 100x50+10+10 Imagen/fotoSu.tiff')	# efecto polaroid
+		
 		enviaFTP("Imagen/fotoSu.png", "/Fotos/"+files[:len(files)-4]+".png")
+		enviaFTP("Imagen/fotoSu.tiff", "/Fotos/"+files[:len(files)-4]+".tiff")
