@@ -28,7 +28,6 @@ while 1:
 			#print str(10*x)+' '+str(10*y)
 			time.sleep(.1)
 		elif e.type == pygame.locals.JOYBUTTONDOWN: # 10
-			
 			if j.get_button(4):	# button L1
 				print 'L1'
 				s.write('L1')
