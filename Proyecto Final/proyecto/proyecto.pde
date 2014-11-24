@@ -49,8 +49,8 @@ void setup()
   size(WIDTH, HEIGHT);
   // -------------- Reproduce Musica ----------- //
   minim = new Minim(this);
-  player = minim.loadFile("MarioM.mp3", 2048);
-  player.play();
+  //player = minim.loadFile("MarioM.mp3", 2048);
+  //player.play();
   // -------------------------------------------//
   keys = new boolean[4]; // las 4 flechas
   for(int i=0; i<4;i++)
@@ -76,8 +76,8 @@ void setup()
 }
 void draw()
 {  
-  background(255);
   
+  background(255);  
   
   /*/ ------------ Fondo Flechas --------//
   fill(50,100,255);
@@ -89,12 +89,13 @@ void draw()
   strokeWeight(2);
   rect((int)WIDTH/2-250, HEIGHT-110, 500, 100, 3);
   // ------------------------------------ //
+
   fill(0);
-  textSize(30);
-  text("Puntaje: "+String.valueOf(Puntaje), 200, 50);
-  
+  textSize(50);
+  text("Puntaje: "+String.valueOf(Puntaje), WIDTH/2 - 100, HEIGHT - 200);
+  tint(255);
   PImage logo = loadImage("logo.png");
-  image(logo, 50, 50);
+  image(logo, 200, 50);
   
   // --------- ----------------------- KINECT ----------------------------------------------------- //
   context.update();
@@ -204,6 +205,7 @@ void draw()
       // ------------------------------ Fin Movimiento Manos ---------------------------------------------------- //
        //println(projRHand.x);
     }
+    
   }
   // ---------FIN KINECT------------------- //
   for(int i=0; i< nA; i++)
