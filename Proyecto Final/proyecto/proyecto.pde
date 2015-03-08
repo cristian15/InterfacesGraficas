@@ -15,14 +15,15 @@ PImage img;
 //------------------//
 
 int HEIGHT = 700, WIDTH = 1000, delay, Puntaje, MargenXKin =0, MargenYKin = 0;
-int nA = 200, Paso = 1;  // numero de flechas
+int nA = 200, Paso = 2;  // numero de flechas
 Arrow[] a = new Arrow[nA];
 Arrow[] b = new Arrow[nA];
 String[] l = new String[5];
 long tInicio, tNow;  // tiempos  ms
 
 boolean[] keys;  // teclas presionadas
-// ----- Audio --- //
+
+// ----- Audio ---- //
 AudioPlayer player;
 Minim minim;
 // --------------- //
@@ -33,6 +34,12 @@ void anotar() // Hace saber al usuario que anotó
   strokeWeight(2);
   rect((int)WIDTH/2 -250, HEIGHT-110, 500, 100, 3);  
 }
+void perdio() // Hace saber al usuario que anotó
+{
+  fill(255,0, 0, 80);
+  strokeWeight(2);
+  rect((int)WIDTH/2 -250, HEIGHT-110, 500, 100, 3);  
+} 
 
 void setup()
 {
@@ -49,36 +56,36 @@ void setup()
   size(WIDTH, HEIGHT);
   // -------------- Reproduce Musica ----------- //
   minim = new Minim(this);
-  //player = minim.loadFile("MarioM.mp3", 2048);
-  //player.play();
+  player = minim.loadFile("MarioM.mp3", 2048);
+  player.play();
   // -------------------------------------------//
   keys = new boolean[4]; // las 4 flechas
   for(int i=0; i<4;i++)
-    keys[i] = false;    // inicia todas las teclas No presionadas
+    keys[i] = false;    // inicia todas las teclas NO presionadas
   
+  // ------ Valor del Sentido de las Flechas ------ //
   l[0] = "Left";
   l[1] = "Right";
   l[2] = "Up";
   l[3] = "Down";
   l[4] = "None";
-  
+  // --------------------------------------------- //
   tInicio = System.currentTimeMillis();
   
   Puntaje = 0; 
   Random r = new Random();
-  
-  for(int i=0; i< nA; i++)
+  // ------------------ Crea Las Flechas ----------------------------- //
+  for(int i=0; i< nA; i++)  
   {
      a[i] = new Arrow((int) WIDTH/2 - 220, 10 + i*-150, 100, l[r.nextInt(5)], false);      
      b[i] = new Arrow((int) WIDTH/2 + 130, 10 + i*-150, 100, l[r.nextInt(5)], false);   
   }  
-  
+  // ----------------------------------------------------------------- //
 }
 void draw()
 {  
   
-  background(255);  
-  
+  background(255);    
   /*/ ------------ Fondo Flechas --------//
   fill(50,100,255);
   strokeWeight(5);
@@ -89,21 +96,26 @@ void draw()
   strokeWeight(2);
   rect((int)WIDTH/2-250, HEIGHT-110, 500, 100, 3);
   // ------------------------------------ //
-
+ // ------------- Texto de Puntaje ---------------- //
   fill(0);
+  PFont font;  
+  font = createFont("Bauhaus 93",50);
+  textFont(font);
   textSize(50);
-  text("Puntaje: "+String.valueOf(Puntaje), WIDTH/2 - 100, HEIGHT - 200);
+  text("Puntaje: "+String.valueOf(Puntaje), WIDTH/2 - 120, HEIGHT - 200);
+  // ---------------------------------------------//
+  // ------------------ Imagen del Logo --------------- //
   tint(255);
   PImage logo = loadImage("logo.png");
   image(logo, 200, 50);
-  
-  // --------- ----------------------- KINECT ----------------------------------------------------- //
+  // ------------------------------------------------- /
+  // -------------------------------- KINECT ----------------------------------------------------- //
   context.update();
   PImage depthImage = context.depthImage();
   depthImage.loadPixels();
   int[] upix = context.userMap();
   
-  //colorize users
+  //pinta los usuarios
   for(int i=0; i < upix.length; i++){
     if(upix[i] > 0){
       //there is a user on that position
@@ -119,55 +131,56 @@ void draw()
   tint(255,127);  // Transparencia
   image(context.rgbImage(), MargenXKin, MargenYKin, WIDTH, HEIGHT);
   //image(img,MargenXKin,MargenYKin);
-  //get array of IDs of all users present 
-  int[] users=context.getUsers();
+  
+ 
+  int[] users=context.getUsers(); // obtiene los ID de los usuarios
  
   ellipseMode(CENTER);
  
-  //iterate through users
   for(int i=0; i < users.length; i++){
     
     int uid=users[i];
     
-    //draw center of mass of the user (simple mean across position of all user pixels that corresponds to the given user)
+    // ---------- Dibuja el centro de masa ------- //
     PVector realCoM=new PVector();
     
-    //get the CoM in realworld (3D) coordinates
-    context.getCoM(uid,realCoM);
+    //obtiene el Centro de masa 
+    context.getCoM(uid, realCoM);
     PVector projCoM=new PVector();
     
     context.convertRealWorldToProjective(realCoM, projCoM);
     fill(255,0,0);
     ellipse((MargenXKin+projCoM.x)*(1.6),(MargenYKin+projCoM.y)*(1.6),50,50);
- 
-    //check if user has a skeleton
-    if(context.isTrackingSkeleton(uid)){
-      //draw head
+   // ----------------------------------------------//
+    // si esta trackeando el esqueleto
+    if(context.isTrackingSkeleton(uid))
+    {
+      // -------------------- Pinta la cabeza ----------------------//
       PVector realHead=new PVector();
       // obtiene el vector de las coordendas reales de la cabeza
-      context.getJointPositionSkeleton(uid,SimpleOpenNI.SKEL_HEAD,realHead);  
+      context.getJointPositionSkeleton(uid,SimpleOpenNI.SKEL_HEAD, realHead);  
       PVector projHead=new PVector();
       context.convertRealWorldToProjective(realHead, projHead);   // convierte el vector a projective para utilizarlas en la ventana
       tint(255); 
       PImage cabeza = loadImage("head.png");     
       image(cabeza, (MargenXKin+projHead.x-50)*1.6, (MargenYKin+projHead.y-35)*1.6, 200,200 );
-      
-      // left hand
+      // ----------------------------------------------------------//
+      // --------------------- Left Hand -------------------------//
       PVector realLHand=new PVector();
       context.getJointPositionSkeleton(uid,SimpleOpenNI.SKEL_LEFT_HAND,realLHand);
       PVector projLHand=new PVector();
       context.convertRealWorldToProjective(realLHand, projLHand);
       fill(255,255,0);
       ellipse((MargenXKin+projLHand.x)*1.6,(MargenYKin+projLHand.y)*1.6,30,30);
-       
-       // Rigth hand
+      // -------------------------------------------------------//
+       // ---------------------- Rigth Hand ------------------------//
       PVector realRHand=new PVector();
       context.getJointPositionSkeleton(uid,SimpleOpenNI.SKEL_RIGHT_HAND,realRHand);
       PVector projRHand=new PVector();
       context.convertRealWorldToProjective(realRHand, projRHand);
       fill(125,255,200);
       ellipse((MargenXKin+projRHand.x)*1.6, (MargenYKin+projRHand.y)*1.6, 30,30);             
-      
+      // -----------------------------------------------------------//
       
       // ------------------- Movimiento de Manos ---------------------------------- //
       
@@ -451,12 +464,19 @@ void draw()
                 a[i].anotado = true;
                 b[i].anotado = true;
               }
-              anotar();
-            }  
+              anotar();        
+            }           
+            
                         
         }    
         // 
-        // deja todas las flechas como no presionadas
+        
+        if(!a[i].anotado || !b[i].anotado)
+        {
+          perdio();
+        }
+        // deja todas las flechas como no 
+        
          keys[0] = false; 
          keys[1] = false; 
          keys[2] = false; 
@@ -562,20 +582,18 @@ class Arrow
   
 }
 
-//is called everytime a new user appears
+// cada vez aparece un usuario nuevo
 void onNewUser(SimpleOpenNI curContext, int userId)
 {
-  println("onNewUser - userId: " + userId);
-  //asks OpenNI to start tracking a skeleton data for this user 
-  //NOTE: you cannot request more than 2 skeletons at the same time due to the perfomance limitation
-  //      so some user logic is necessary (e.g. only the closest user will have a skeleton)
+  println("Nuevo Usuario ID: " + userId);
+  // comienza el tracking del esqueleto
   curContext.startTrackingSkeleton(userId);
-}
- 
-//is called everytime a user disappears
+  
+} 
+// cada vez que se pierde un usuario
 void onLostUser(SimpleOpenNI curContext, int userId)
 {
-  println("onLostUser - userId: " + userId);
+  println("Usuario Perdido ID: " + userId);
  
 }
 
